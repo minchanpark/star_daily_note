@@ -1,0 +1,345 @@
+.container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 10%, rgba(82, 66, 140, 0.45), transparent 50%),
+    radial-gradient(circle at 10% 80%, rgba(16, 46, 107, 0.35), transparent 55%),
+    linear-gradient(180deg, #020617 0%, #000511 60%, #000 100%);
+  background-attachment: fixed;
+  color: #f8f7ff;
+}
+
+.userMenu {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 100;
+}
+
+.userEmail {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.logoutButton {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logoutButton:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.skyLayers {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.layer,
+.layerSoft,
+.layerGradient {
+  position: absolute;
+  inset: -20%;
+  background-repeat: no-repeat;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: drift 26s infinite alternate ease-in-out;
+}
+
+.layer {
+  background: radial-gradient(circle at 30% 20%, rgba(71, 61, 255, 0.25), transparent 55%);
+}
+
+.layerSoft {
+  background: radial-gradient(circle at 70% 35%, rgba(32, 113, 195, 0.35), transparent 60%);
+  animation-duration: 32s;
+  animation-delay: 4s;
+}
+
+.layerGradient {
+  background: radial-gradient(circle at 45% 80%, rgba(9, 90, 121, 0.25), transparent 50%);
+  animation-duration: 38s;
+  animation-delay: 8s;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1.05);
+  }
+  to {
+    transform: translate3d(2%, 1%, 0) scale(1.15);
+  }
+}
+
+.sky {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.sparkle::before,
+.sparkle::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.32) 1px, transparent 1px);
+  background-size: 120px 120px;
+  opacity: 0.45;
+  transform: rotate(12deg);
+  animation: sparkleShift 18s linear infinite;
+  pointer-events: none;
+}
+
+.sparkle::after {
+  background-size: 90px 90px;
+  opacity: 0.65;
+  transform: rotate(-6deg);
+  animation-duration: 26s;
+}
+
+@keyframes sparkleShift {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(-40px, -60px, 0) rotate(6deg);
+  }
+}
+
+.star {
+  position: absolute;
+  width: clamp(1rem, 2.5vw, 1.5rem);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.15) 68%, transparent 70%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.35);
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 200ms ease-out, box-shadow 220ms ease-out, border-color 220ms ease-out;
+  animation: twinkle calc(8s + 4s * var(--twinkle-offset, 0)) ease-in-out infinite;
+  cursor: pointer;
+}
+
+.star:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 0 28px rgba(255, 229, 170, 0.6);
+}
+
+.star:focus-visible {
+  outline: 2px solid rgba(252, 211, 77, 0.9);
+  outline-offset: 3px;
+}
+
+.starActive {
+  transform: translate(-50%, -50%) scale(1.25);
+  box-shadow: 0 0 32px rgba(252, 211, 77, 0.9);
+  border-color: rgba(255, 214, 128, 0.95);
+}
+
+.starHighlighted {
+  animation: starBirth 1.4s ease-out;
+}
+
+@keyframes starBirth {
+  0% {
+    transform: translate(-50%, 40%) scale(0.2);
+    opacity: 0;
+  }
+  45% {
+    transform: translate(-50%, -80%) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.starCore {
+  display: block;
+  width: 40%;
+  height: 40%;
+  margin: 30%;
+  background: radial-gradient(circle, #ffe082 0%, rgba(255, 193, 7, 0.2) 70%, transparent 72%);
+  border-radius: 50%;
+  animation: corePulse 3.2s ease-in-out infinite;
+}
+
+@keyframes corePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+.controlPanel {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.recordWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: auto;
+}
+
+.recordButton {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(3.5rem, 12vw, 5.5rem);
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, #fcd34d, #f59e0b 60%, #ea580c 100%);
+  color: #fffbe6;
+  box-shadow: 0 12px 30px rgba(250, 204, 21, 0.3), 0 0 0 2px rgba(251, 191, 36, 0.4);
+  cursor: pointer;
+  transition: transform 180ms ease-out, box-shadow 180ms ease-out, opacity 180ms ease-out;
+}
+
+.recordButton:hover {
+  transform: translateY(-5%);
+  box-shadow: 0 16px 36px rgba(251, 191, 36, 0.45);
+}
+
+.recordButton:focus-visible {
+  outline: 2px solid rgba(250, 204, 21, 0.85);
+  outline-offset: 4px;
+}
+
+.recordButtonRecording {
+  animation: recordPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes recordPulse {
+  0%,
+  100% {
+    box-shadow: 0 12px 30px rgba(250, 204, 21, 0.35), 0 0 0 0 rgba(251, 191, 36, 0.35);
+    transform: translateY(-3%);
+  }
+  50% {
+    box-shadow: 0 18px 42px rgba(249, 115, 22, 0.55), 0 0 0 14px rgba(249, 115, 22, 0);
+    transform: translateY(-8%);
+  }
+}
+
+.recordButtonUploading {
+  cursor: progress;
+  opacity: 0.65;
+}
+
+.recordButtonLaunching {
+  animation: launch 1s ease-in forwards;
+}
+
+@keyframes launch {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-120%) scale(0.85);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-220%) scale(0.7);
+    opacity: 0;
+  }
+}
+
+.recordIcon {
+  width: 68%;
+  height: 68%;
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.55));
+}
+
+.recordStatus {
+  max-width: clamp(16rem, 40vw, 24rem);
+  text-align: center;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  color: rgba(226, 232, 255, 0.9);
+}
+
+.recordError {
+  font-size: clamp(0.75rem, 1.6vw, 0.85rem);
+  color: #fca5a5;
+  margin-top: 0.5rem;
+}
+
+.recordHint {
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+  color: rgba(226, 232, 255, 0.8);
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: clamp(18rem, 45vw, 28rem);
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .star {
+    width: clamp(1.2rem, 3.5vw, 1.8rem);
+  }
+
+  .recordStatus {
+    font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  }
+}
+
+@media (max-width: 520px) {
+  .controlPanel {
+    padding-bottom: 2.5rem;
+  }
+
+  .recordStatus {
+    max-width: 18rem;
+  }
+}
