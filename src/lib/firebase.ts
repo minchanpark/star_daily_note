@@ -14,16 +14,6 @@ const firebaseEnv = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const fallbackConfig: FirebaseOptions & { measurementId?: string } = {
-  apiKey: "AIzaSyCfCTRZSU5S9yIhDL0gA-klEsxBygwoLtw",
-  authDomain: "star-daily-note.firebaseapp.com",
-  projectId: "star-daily-note",
-  storageBucket: "star-daily-note.firebasestorage.app",
-  messagingSenderId: "553095837817",
-  appId: "1:553095837817:web:789336ac085b0620a5bca8",
-  measurementId: "G-RKXEW9C92H",
-};
-
 const createFirebaseConfig = (): FirebaseOptions & { measurementId?: string } => {
   const requiredKeys: Array<keyof typeof firebaseEnv> = [
     "apiKey",
@@ -48,13 +38,9 @@ const createFirebaseConfig = (): FirebaseOptions & { measurementId?: string } =>
     };
   }
 
-  if (process.env.NODE_ENV !== "production") {
-    console.warn(
-      `Falling back to embedded Firebase config because environment variables are missing: ${missing.join(", ")}`,
-    );
-  }
+  const message = `Missing Firebase environment variables: ${missing.join(", ")}.`;
 
-  return fallbackConfig;
+  throw new Error(`${message} Define them in your .env.local (never commit real values).`);
 };
 
 const firebaseConfig = createFirebaseConfig();

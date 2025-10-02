@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Timestamp,
   collection,
@@ -9,7 +9,8 @@ import {
   query,
   type QueryDocumentSnapshot,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getDownloadURL, ref } from "firebase/storage";
+import { db, storage } from "@/lib/firebase";
 import RecordButton from "@/components/RecordButton";
 import UserMenu from "@/components/UserMenu";
 import Star, { type StarEntry } from "@/components/Star";
@@ -39,7 +40,7 @@ const mapSnapshotToEntry = (
   doc: QueryDocumentSnapshot,
 ): StarEntry | null => {
   const data = doc.data();
-  if (typeof data.audioUrl !== "string" || data.audioUrl.length === 0) {
+  if (typeof data.storagePath !== "string" || data.storagePath.length === 0) {
     return null;
   }
 
@@ -51,7 +52,7 @@ const mapSnapshotToEntry = (
 
   return {
     id: doc.id,
-    audioUrl: data.audioUrl,
+    storagePath: data.storagePath,
     createdAt,
     x,
     y,
@@ -64,7 +65,10 @@ const NightSky = () => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [pendingHighlightId, setPendingHighlightId] = useState<string | null>(null);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const [playbackError, setPlaybackError] = useState<string | null>(null);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const urlCacheRef = useRef<Map<string, string>>(new Map());
 
   useEffect(() => {
     if (!user?.uid) {
@@ -113,41 +117,60 @@ const NightSky = () => {
     }
   }, []);
 
-  const handleStarSelect = (entry: StarEntry) => {
+  const stopCurrentAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+  }, []);
+
+  const playEntry = useCallback(async (entry: StarEntry) => {
     if (activeId === entry.id) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        audioRef.current = null;
-      }
+      stopCurrentAudio();
       setActiveId(null);
       return;
     }
 
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
+    stopCurrentAudio();
+    setPlaybackError(null);
+    setLoadingId(entry.id);
 
-    const audio = new Audio(entry.audioUrl);
-    audioRef.current = audio;
+    let audio: HTMLAudioElement | null = null;
 
-    audio.addEventListener("ended", () => {
-      setActiveId((current) => (current === entry.id ? null : current));
-      if (audioRef.current === audio) {
-        audioRef.current = null;
+    try {
+      let audioUrl = urlCacheRef.current.get(entry.id);
+      if (!audioUrl) {
+        audioUrl = await getDownloadURL(ref(storage, entry.storagePath));
+        urlCacheRef.current.set(entry.id, audioUrl);
       }
-    });
 
-    audio.play().then(() => {
+      audio = new Audio(audioUrl);
+      audioRef.current = audio;
+
+      audio.addEventListener("ended", () => {
+        setActiveId((current) => (current === entry.id ? null : current));
+        if (audioRef.current === audio) {
+          audioRef.current = null;
+        }
+      });
+
+      await audio.play();
       setActiveId(entry.id);
-    }).catch((error) => {
+    } catch (error) {
       console.error("Audio playback failed", error);
       if (audioRef.current === audio) {
         audioRef.current = null;
       }
       setActiveId(null);
-    });
+      setPlaybackError("별의 음성을 재생할 수 없어요. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setLoadingId((current) => (current === entry.id ? null : current));
+    }
+  }, [activeId, stopCurrentAudio]);
+
+  const handleStarSelect = (entry: StarEntry) => {
+    void playEntry(entry);
   };
 
   const handleEntryCreated = (entryId: string) => {
@@ -171,7 +194,7 @@ const NightSky = () => {
           <Star
             key={entry.id}
             entry={entry}
-            isActive={entry.id === activeId}
+            isActive={entry.id === activeId || entry.id === loadingId}
             isHighlighted={entry.id === highlightedId}
             onSelect={handleStarSelect}
           />
@@ -181,6 +204,12 @@ const NightSky = () => {
       <div className={styles.controlPanel}>
         <RecordButton onEntryCreated={handleEntryCreated} />
       </div>
+
+      {playbackError ? (
+        <div className={styles.playbackError} role="alert">
+          {playbackError}
+        </div>
+      ) : null}
     </div>
   );
 };

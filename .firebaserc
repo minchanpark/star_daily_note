@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "star-daily-note"
-  }
+    "default": "star-record-note",
+    "star-record-note": "star-record-note"
+  },
+  "targets": {},
+  "etags": {}
 }

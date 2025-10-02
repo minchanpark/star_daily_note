@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "@/lib/firebase";
 import styles from "@/styles/NightSky.module.css";
 
@@ -85,16 +85,15 @@ const RecordButton = ({ onEntryCreated }: RecordButtonProps) => {
         return;
       }
 
-      const objectKey = createObjectKey(userId);
-      const storageRef = ref(storage, objectKey);
+      const storagePath = createObjectKey(userId);
+      const storageRef = ref(storage, storagePath);
       await uploadBytes(storageRef, blob, { contentType: blob.type });
-      const audioUrl = await getDownloadURL(storageRef);
 
       const x = Number(randomBetween(10, 90).toFixed(2));
       const y = Number(randomBetween(20, 80).toFixed(2));
 
       const entry = await addDoc(collection(db, "users", userId, "record_note"), {
-        audioUrl,
+        storagePath,
         createdAt: serverTimestamp(),
         x,
         y,

@@ -44,7 +44,7 @@ firebase deploy --only hosting
 - `images.unoptimized: true` - 이미지 최적화 비활성화 (static export 필수)
 
 ### `.firebaserc`
-- 프로젝트 ID: `star-daily-note`
+- 프로젝트 ID: `star-record-note`
 
 ## 주의사항
 
@@ -63,11 +63,11 @@ firebase deploy --only hosting
 
 ## 배포 후 확인
 
-배포가 완료되면 다음 URL에서 확인할 수 있습니다:
+배포가 완료되면 다음 URL에서 확인할 수 있습니다 (Firebase 콘솔에서 호스팅 URL 확인):
 ```
-https://star-daily-note.web.app
+https://star-record-note.web.app
 또는
-https://star-daily-note.firebaseapp.com
+https://star-record-note.firebaseapp.com
 ```
 
 ## 문제 해결

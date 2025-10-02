@@ -6,7 +6,7 @@ import styles from "@/styles/NightSky.module.css";
 
 export type StarEntry = {
   id: string;
-  audioUrl: string;
+  storagePath: string;
   createdAt: Date | null;
   x: number;
   y: number;

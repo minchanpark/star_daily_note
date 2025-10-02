@@ -18,7 +18,27 @@ https://console.firebase.google.com/
 
 ---
 
-## 3. Firestore 보안 규칙 업데이트
+## 3. 환경 변수 설정
+
+1. `env.local.example` 파일을 복사해 프로젝트 루트에 `.env.local`을 만듭니다.
+2. Firebase Console > 프로젝트 설정 > 일반 탭에서 **`star-record-note`** 웹 앱의 구성 값을 확인합니다.
+3. 아래 항목을 실제 값으로 채웁니다.
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+NEXT_PUBLIC_FIREBASE_APP_ID=...
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=... # optional
+```
+
+> `.env.local`은 이미 `.gitignore`에 포함되어 있으므로, **실제 값이 저장소에 커밋되지 않도록 주의**하세요.
+
+---
+
+## 4. Firestore 보안 규칙 업데이트
 
 좌측 메뉴에서 **Firestore Database** → **규칙** 탭
 
@@ -47,7 +67,7 @@ service cloud.firestore {
 
 ---
 
-## 4. Storage 보안 규칙 업데이트
+## 5. Storage 보안 규칙 업데이트
 
 좌측 메뉴에서 **Storage** → **규칙** 탭
 
@@ -65,6 +85,8 @@ service firebase.storage {
   }
 }
 ```
+
+> 애플리케이션은 업로드 후 **파일 경로만 Firestore에 저장**하고, 재생 시점에 `getDownloadURL`을 호출해 일회성 URL을 생성합니다. 따라서 다운로드 토큰이 DB에 장기간 남지 않아 노출 위험을 줄일 수 있습니다.
 
 **게시** 버튼 클릭하여 적용
 
