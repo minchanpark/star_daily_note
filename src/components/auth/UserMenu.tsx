@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import styles from "@/styles/NightSky.module.css";
+import styles from "@/components/sky/NightSky.module.css";
 
 const UserMenu = () => {
   const { user, logOut } = useAuth();

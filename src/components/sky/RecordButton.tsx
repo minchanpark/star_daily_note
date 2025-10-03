@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "@/lib/firebase";
-import styles from "@/styles/NightSky.module.css";
+import styles from "./NightSky.module.css";
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 

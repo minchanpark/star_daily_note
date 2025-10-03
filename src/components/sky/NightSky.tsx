@@ -11,11 +11,11 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
-import RecordButton from "@/components/RecordButton";
-import UserMenu from "@/components/UserMenu";
-import Star, { type StarEntry } from "@/components/Star";
+import { RecordButton, Star } from "./";
+import { AuthForm, UserMenu } from "@/components/auth";
+import type { StarEntry } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
-import styles from "@/styles/NightSky.module.css";
+import styles from "./NightSky.module.css";
 
 const USERS_COLLECTION = "users";
 const RECORD_NOTE_SUBCOLLECTION = "record_note";
@@ -178,6 +178,10 @@ const NightSky = () => {
   };
 
   const skyClassName = `${styles.sky} ${styles.sparkle}`;
+
+  if (!user) {
+    return <AuthForm />;
+  }
 
   return (
     <div className={styles.container}>

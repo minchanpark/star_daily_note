@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import styles from "@/styles/AuthForm.module.css";
+import styles from "./AuthForm.module.css";
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");

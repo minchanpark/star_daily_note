@@ -1,16 +1,7 @@
-"use client";
-
 import type { CSSProperties } from "react";
 import { memo, useMemo } from "react";
-import styles from "@/styles/NightSky.module.css";
-
-export type StarEntry = {
-  id: string;
-  storagePath: string;
-  createdAt: Date | null;
-  x: number;
-  y: number;
-};
+import type { StarEntry } from "@/types";
+import styles from "./NightSky.module.css";
 
 type StarProps = {
   entry: StarEntry;

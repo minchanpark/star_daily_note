@@ -1,5 +1,5 @@
 import { AuthProvider } from './contexts/AuthContext'
-import NightSky from './components/NightSky'
+import { NightSky } from './components/sky'
 
 export default function App() {
   return (
