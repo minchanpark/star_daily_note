@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 별빛 일기 (Star Daily Note)
+
+음성으로 기록하는 일기 앱입니다.
+
+## Tech Stack
+
+- **Frontend**: React 19 + Vite 6
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4
+- **Backend**: Firebase (Authentication, Firestore, Storage, Analytics)
+- **Deployment**: Firebase Hosting
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+- Firebase project ([Setup guide](./FIREBASE_SETUP.md))
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 의존성 설치
+npm install
+
+# 환경 변수 설정
+cp env.local.example .env.local
+# .env.local 파일을 열어서 Firebase 설정값 입력
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# 개발 서버 실행 (http://localhost:5173)
+npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 빌드
+npm run build
+
+# 빌드 미리보기
+npm run preview
+
+# Firebase에 배포
+npm run deploy
+```
+
+## Project Structure
+
+```
+src/
+  ├── components/     # React 컴포넌트
+  │   ├── AuthForm.tsx
+  │   ├── NightSky.tsx
+  │   ├── RecordButton.tsx
+  │   ├── Star.tsx
+  │   └── UserMenu.tsx
+  ├── contexts/       # React Context
+  │   └── AuthContext.tsx
+  ├── lib/           # 유틸리티
+  │   └── firebase.ts
+  ├── styles/        # CSS 모듈
+  ├── App.tsx        # 메인 앱
+  ├── main.tsx       # 진입점
+  └── globals.css    # 전역 스타일
+```
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [React Documentation](https://react.dev/)
+- [Vite Documentation](https://vite.dev/)
+- [Firebase Documentation](https://firebase.google.com/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Firebase Hosting을 사용합니다. 자세한 내용은 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참조하세요.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
